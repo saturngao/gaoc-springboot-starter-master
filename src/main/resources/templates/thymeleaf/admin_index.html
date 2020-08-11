@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+
+        });
+    </script>
+    <SCRIPT LANGUAGE=javascript>
+        function del(url) {
+            var msg = "您真的确定要删除吗？\n\n请确认！";
+            if (confirm(msg)==true){
+                window.location= url;
+                return true;
+            }else{
+                return false;
+            }
+        }
+
+        function changePwd(userId) {
+            window.open("/user/jump/update/"+ userId, "_blank",'height=200,width=400,status=yes,top=200,left=400,toolbar=no,menubar=no,location=no')
+        }
+        function seeLog(userId) {
+            window.open("/user/jump/log/"+ userId, "_blank",'height=800,width=1200,status=yes,top=200,left=400,toolbar=no,menubar=no,location=no')
+        }
+    </SCRIPT>
+    <title>管理员</title>
+</head>
+<body>
+    <table style="width:70%;" cellpadding="2" cellspacing="0" border="1" bordercolor="#000000">
+        <thead>
+        <tr>
+            <td>姓名</td>
+            <td>身份证号</td>
+            <td>工号</td>
+            <td>操作</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="human : ${sysUsers}">
+            <td th:text="${human.username}"></td>
+            <td th:text="${human.idNo}"></td>
+            <td th:text="${human.workNo}"></td>
+            <td>
+                <a href="#" onclick="del('/user/del/' + this.name)" th:name="${human.id}" >删除</a>
+                <a href="#" onclick="changePwd(this.name)" th:name="${human.id}" >改密码</a>
+                <a href="#" onclick="seeLog(this.name)" th:name="${human.id}" >查看计算历史</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("#change").click(function () {
+                $.post("/user/updateUser",
+                    {
+                        password : $("#password").val(),
+                        id : '[[${userId}]]'
+                    },
+                    function(){
+                        window.close();
+                    });
+            });
+        });
+    </script>
+    <title>修改密码</title>
+</head>
+<body>
+<div id="dialog-form" title="修改密码">
+    <form>
+        <fieldset>
+            <label for="password">密码</label>
+            <input type="password" name="password" id="password" value="" >
+        </fieldset>
+    </form>
+</div>
+<button name="确认修改" id="change">确认修改</button>
+</body>
+</html>

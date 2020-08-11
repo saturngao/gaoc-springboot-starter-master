@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("#count").click(function(){
+                $.post("/user/count",
+                    {
+                        id  : $("#id").val(),
+                        cH  : $("#cH").val(),
+                        cC  : $("#cC").val(),
+                        cLH : $("#cLH").val(),
+                        cLC : $("#cLC").val(),
+                        cYH : $("#cYH").val(),
+                        cYC : $("#cYC").val(),
+                        userId : $("#userId").val()
+                    },
+                    function(data){
+                        $("#result").html(data.data);
+                    });
+            });
+            $("#query").click(function(){
+                $.post("/user/query",
+                    {
+                        doorId : $("#doorId").val()
+                    },
+                    function(data){
+                        var doorInfo = JSON.parse(data.data);
+                        $("#cH1").html(doorInfo.ch);
+                        $("#cC1").html(doorInfo.cc);
+                        $("#cLH1").html(doorInfo.clh);
+                        $("#cLC1").html(doorInfo.clc);
+                        $("#cYH1").html(doorInfo.cyh);
+                        $("#cYC1").html(doorInfo.cyc);
+                    });
+            });
+        });
+        function changePwd(userId) {
+            window.open("/user/jump/update/"+ userId, "_blank",'height=200,width=400,status=yes,top=200,left=400,toolbar=no,menubar=no,location=no')
+        }
+    </script>
+    <title></title>
+</head>
+<body>
+<a href="#" onclick="changePwd(this.name)" th:name="${userId}" >改密码</a>
+    <table style="width:100%;" cellpadding="2" cellspacing="0" border="1" bordercolor="#000000">
+        <tbody>
+        <tr>
+            <td rowspan="6">
+                请选择闸口：
+                <select name="id" id="id" class="form-control">
+                    <option th:each="repaymentType:${codeList}"
+                            th:value="${repaymentType.id}"
+                            th:text="${repaymentType.doorName}">
+                    </option>
+                </select>
+                <input type="hidden" id="userId" th:value="${userId}">
+            </td>
+            <td>
+                QH:黄河用水量:<input type="text" name="cH" id="cH" value="0.00">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                QC:长江用水量:<input type="text" name="cC" id="cC" value="0.00">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                QLH:黄河临时用水量:<input type="text" name="cLH" id="cLH" value="0.00">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                QLC长江临时用水量:<input type="text" name="cLC" id="cLC" value="0.00">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                QYH：黄河应急用水量:<input type="text" name="cYH" id="cYH" value="0.00">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                QYC：长江应急用水量:<input type="text" name="cYC" id="cYC" value="0.00">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button id="count">计算</button>
+            </td>
+            <td>
+                总费用为：<label id="result"></label>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+<br>
+<br>
+    <table style="width:70%;" cellpadding="2" cellspacing="0" border="1" bordercolor="#000000">
+        <tbody>
+        <tr>
+            <td rowspan="6">
+                请选择闸口：
+                <select name="doorId" id="doorId" class="form-control">
+                    <option th:each="repaymentType:${codeList}"
+                            th:value="${repaymentType.id}"
+                            th:text="${repaymentType.doorName}">
+                    </option>
+                </select>
+            </td>
+            <td>
+                QH:黄河用水单价:<label id="cH1" ></label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                QC:长江用水单价:<label id="cC1"></label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                QLH:黄河临时用水单价:<label id="cLH1"></label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                QLC长江临时用水单价:<label id="cLC1"></label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                QYH：黄河应急用水单价:<label id="cYH1"></label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                QYC：长江应急用水单价:<label id="cYC1"></label>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <button id="query">查询</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</body>
+</html>

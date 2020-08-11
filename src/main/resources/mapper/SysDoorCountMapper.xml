@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.imooc.mapper.SysDoorCountMapper" >
+  <resultMap id="BaseResultMap" type="com.imooc.pojo.SysDoorCount" >
+    <id column="id" property="id" />
+    <result column="door_name" property="doorName" />
+    <result column="cH" property="cH" />
+    <result column="cC" property="cC" />
+    <result column="cLH" property="cLH" />
+    <result column="cLC" property="cLC" />
+    <result column="cYH" property="cYH" />
+    <result column="cYC" property="cYC" />
+    <result column="B" property="B" />
+  </resultMap>
+
+  <select id="getAllList" resultMap="BaseResultMap"
+          parameterType="java.lang.String" >
+    select
+      *
+    from
+      sys_door_count
+  </select>
+
+  <select id="getById" resultMap="BaseResultMap"
+          parameterType="java.lang.String" >
+    select
+      *
+    from
+      sys_door_count
+    where id=#{id}
+  </select>
+
+  <select id="getCodeList" resultType="map">
+    select
+      id, door_name as doorName
+    from
+      sys_door_count
+  </select>
+</mapper>
