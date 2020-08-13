@@ -2,10 +2,82 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 <head lang="en">
     <meta charset="UTF-8"/>
-    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
-    <script>
-        $(document).ready(function(){
+    <link rel="stylesheet" type="text/css" href="https://www.layuicdn.com/layui/css/layui.css" />
+    <script src="https://www.layuicdn.com/layui/layui.js"></script>
+    <script type="text/javascript">
+        layui.use('table', function(){
+            var table = layui.table;
 
+            table.render({
+                elem: '#test'
+                ,url:'/user/admin/data'
+                ,toolbar: true
+                ,title: '用户数据表'
+                ,totalRow: true
+                ,method: 'post'
+                ,cols: [
+                    [
+                        {field:'username', title:'姓名', fixed: 'left', unresize: true, sort: true, totalRowText: '合计行'}
+                        ,{field:'idNo', title: '身份证号'}
+                        ,{field:'workNo', title: '工号'}
+                        ,{fixed: 'right', width:178, align:'center', toolbar: '#barDemo'}
+                    ]
+                ]
+                ,page: true
+                ,response: {
+                    statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
+                }
+                ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+                    return {
+                        "code": res.status, //解析接口状态
+                        "msg": res.msg, //解析提示文本
+                        "count": res.data.total, //解析数据长度
+                        "data": res.data.list //解析数据列表
+                    };
+                }
+            });
+
+
+
+            table.on('checkbox(demo)', function(obj){
+                console.log(obj)
+            });
+            //监听工具条
+            table.on('tool(demo)', function(obj){
+                var data = obj.data;
+                if(obj.event === 'detail'){
+                    layer.msg('ID：'+ data.id + ' 的查看操作');
+                } else if(obj.event === 'del'){
+                    layer.confirm('真的删除行么', function(index){
+                        obj.del();
+                        layer.close(index);
+                    });
+                } else if(obj.event === 'edit'){
+                    layer.alert('编辑行：<br>'+ JSON.stringify(data))
+                }
+            });
+
+            var $ = layui.$, active = {
+                getCheckData: function(){ //获取选中数据
+                    var checkStatus = table.checkStatus('idTest')
+                        ,data = checkStatus.data;
+                    layer.alert(JSON.stringify(data));
+                }
+                ,getCheckLength: function(){ //获取选中数目
+                    var checkStatus = table.checkStatus('idTest')
+                        ,data = checkStatus.data;
+                    layer.msg('选中了：'+ data.length + ' 个');
+                }
+                ,isAll: function(){ //验证是否全选
+                    var checkStatus = table.checkStatus('idTest');
+                    layer.msg(checkStatus.isAll ? '全选': '未全选')
+                }
+            };
+
+            $('.demoTable .layui-btn').on('click', function(){
+                var type = $(this).data('type');
+                active[type] ? active[type].call(this) : '';
+            });
         });
     </script>
     <SCRIPT LANGUAGE=javascript>
@@ -29,27 +101,36 @@
     <title>管理员</title>
 </head>
 <body>
-    <table style="width:70%;" cellpadding="2" cellspacing="0" border="1" bordercolor="#000000">
-        <thead>
-        <tr>
-            <td>姓名</td>
-            <td>身份证号</td>
-            <td>工号</td>
-            <td>操作</td>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="human : ${sysUsers}">
-            <td th:text="${human.username}"></td>
-            <td th:text="${human.idNo}"></td>
-            <td th:text="${human.workNo}"></td>
-            <td>
-                <a href="#" onclick="del('/user/del/' + this.name)" th:name="${human.id}" >删除</a>
-                <a href="#" onclick="changePwd(this.name)" th:name="${human.id}" >改密码</a>
-                <a href="#" onclick="seeLog(this.name)" th:name="${human.id}" >查看计算历史</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+
+<table class="layui-hide" id="test" lay-filter="demo"></table>
+<!--    <table style="width:70%;" cellpadding="2" cellspacing="0" border="1" bordercolor="#000000">-->
+<!--        <thead>-->
+<!--        <tr>-->
+<!--            <td>姓名</td>-->
+<!--            <td>身份证号</td>-->
+<!--            <td>工号</td>-->
+<!--            <td>操作</td>-->
+<!--        </tr>-->
+<!--        </thead>-->
+<!--        <tbody>-->
+<!--        <tr th:each="human : ${sysUsers}">-->
+<!--            <td th:text="${human.username}"></td>-->
+<!--            <td th:text="${human.idNo}"></td>-->
+<!--            <td th:text="${human.workNo}"></td>-->
+<!--            <td>-->
+<!--                <a href="#" onclick="del('/user/del/' + this.name)" th:name="${human.id}" >删除</a>-->
+<!--                <a href="#" onclick="changePwd(this.name)" th:name="${human.id}" >改密码</a>-->
+<!--                <a href="#" onclick="seeLog(this.name)" th:name="${human.id}" >查看计算历史</a>-->
+<!--            </td>-->
+<!--        </tr>-->
+<!--        </tbody>-->
+<!--    </table>-->
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
 </body>
 </html>

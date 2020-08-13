@@ -1,49 +1,28 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org">
 <head lang="en">
     <meta charset="UTF-8"/>
     <link rel="stylesheet" type="text/css" href="https://www.layuicdn.com/layui/css/layui.css" />
     <script src="https://www.layuicdn.com/layui/layui.js"></script>
-    <script>
+    <script type="text/javascript">
         layui.use('table', function(){
             var table = layui.table;
 
-            // table.render({
-            //     elem: '#test'
-            //     ,url:'http://localhost:8080/user/jump/info'
-            //     ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
-            //     ,cols: [[
-            //         {field:'userId', width:80, title: 'ID', sort: true}
-            //         ,{field:'totalFee', width:80, title: '用户名'}
-            //         ,{field:'totalCount', width:80, title: '性别', sort: true}
-            //         ,{field:'createTime', width:80, title: '城市'}
-            //     ]]
-            //     ,response: {
-            //         statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
-            //     }
-            //     ,page: true
-            //     ,parseData: function(res){ //res 即为原始返回的数据
-            //         return {
-            //             "code": res.status, //解析接口状态
-            //             "msg": res.msg, //解析提示文本
-            //             "count": res.data.length, //解析数据长度
-            //             "data": res.data //解析数据列表
-            //         };
-            //     }
-            // });
             table.render({
                 elem: '#test'
                 ,url:'http://localhost:8080/user/jump/info'
                 ,toolbar: true
+                ,data:[{pageNum:1, pageSize:20}]
                 ,title: '用户数据表'
                 ,totalRow: true
-                ,cols: [[
+                ,cols: [
+                    [
                     {field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计行'}
-                    ,{field:'userId', title: 'ID', sort: true}
-                    ,{field:'totalFee', title: '用户名'}
-                    ,{field:'totalCount', title: '性别', sort: true}
-                    ,{field:'createTime', title: '城市'}
-                ]]
+                    ,{field:'totalFee', title: '总费用'}
+                    ,{field:'totalCount', title: '计算参数'}
+                    ,{field:'createTime', title: '计算时间'}
+                ]
+                ]
                 ,page: true
                 ,response: {
                     statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
@@ -63,23 +42,23 @@
 </head>
 <body>
 <table class="layui-hide" id="test"></table>
-<table style="width:70%;" cellpadding="2" cellspacing="0" border="1" bordercolor="#000000">
-    <thead>
-    <tr>
-        <td>userId</td>
-        <td>总费用</td>
-        <td>计算参数</td>
-        <td>计算时间</td>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="human : ${record.list}">
-        <td th:text="${human.userId}"></td>
-        <td th:text="${human.totalFee}"></td>
-        <td th:text="${human.totalCount}"></td>
-        <td th:text="${human.createTime}"></td>
-    </tr>
-    </tbody>
-</table>
+<!--<table style="width:70%;" cellpadding="2" cellspacing="0" border="1" bordercolor="#000000">-->
+<!--    <thead>-->
+<!--    <tr>-->
+<!--        <td>userId</td>-->
+<!--        <td>总费用</td>-->
+<!--        <td>计算参数</td>-->
+<!--        <td>计算时间</td>-->
+<!--    </tr>-->
+<!--    </thead>-->
+<!--    <tbody>-->
+<!--    <tr th:each="human : ${record.list}">-->
+<!--        <td th:text="${human.userId}"></td>-->
+<!--        <td th:text="${human.totalFee}"></td>-->
+<!--        <td th:text="${human.totalCount}"></td>-->
+<!--        <td th:text="${human.createTime}"></td>-->
+<!--    </tr>-->
+<!--    </tbody>-->
+<!--</table>-->
 </body>
 </html>

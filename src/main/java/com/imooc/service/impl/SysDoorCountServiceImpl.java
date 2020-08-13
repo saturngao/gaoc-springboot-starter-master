@@ -33,7 +33,7 @@ public class SysDoorCountServiceImpl implements SysDoorCountService {
     }
     @Override
     public PageInfo<SysCountRecord> getAllRecordByCon(Map<String, String> params) {
-        PageHelper.startPage(1, 10);
+        PageHelper.startPage(Integer.parseInt(params.get("pageNum")), Integer.parseInt(params.get("pageSize")));
         List<SysCountRecord> list;
         if(params != null){
             list = sysCountRecordMapper.getUserRecords(params);

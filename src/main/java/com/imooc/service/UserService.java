@@ -3,6 +3,8 @@ package com.imooc.service;
 import java.util.List;
 import java.util.Map;
 
+import com.github.pagehelper.PageInfo;
+import com.imooc.pojo.SysCountRecord;
 import com.imooc.pojo.SysUser;
 
 public interface UserService {
@@ -25,5 +27,5 @@ public interface UserService {
 
 	SysUser queryUser(String userId, String password);
 
-	List<SysUser> queryUserInfo(Map<String, String> param);
+	PageInfo<SysUser> queryUserInfo(Map<String, String> param);
 }

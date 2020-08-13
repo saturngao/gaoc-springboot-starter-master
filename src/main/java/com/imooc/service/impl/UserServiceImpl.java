@@ -3,6 +3,8 @@ package com.imooc.service.impl;
 import java.util.List;
 import java.util.Map;
 
+import com.github.pagehelper.PageInfo;
+import com.imooc.pojo.SysCountRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -119,7 +121,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<SysUser> queryUserInfo(Map<String, String> param) {
-		return userMapperCustom.queryUserInfo(param);
+	public PageInfo<SysUser> queryUserInfo(Map<String, String> params) {
+		PageHelper.startPage(Integer.parseInt(params.get("pageNum")), Integer.parseInt(params.get("pageSize")));
+		PageInfo<SysUser> pageInfo = new PageInfo<>(userMapperCustom.queryUserInfo(params));
+		return pageInfo;
 	}
 }

@@ -56,8 +56,11 @@ public class UserContoller {
 
 	@RequestMapping("jump/info")
 	@ResponseBody
-	public IMoocJSONResult jumpInfo(ModelMap map) {
-		PageInfo<SysCountRecord> list = sysDoorCountService.getAllRecordByCon(new HashMap<String, String>());
+	public IMoocJSONResult jumpInfo(ModelMap map, String pageNum, String pageSize) {
+		val stringStringHashMap = new HashMap<String, String>();
+		stringStringHashMap.put("pageNum", pageNum);
+		stringStringHashMap.put("pageSize", pageSize);
+		PageInfo<SysCountRecord> list = sysDoorCountService.getAllRecordByCon(stringStringHashMap);
 		return IMoocJSONResult.ok(list);
 	}
 
@@ -67,8 +70,8 @@ public class UserContoller {
 		SysUser u = userService.queryUser(username, password);
 		if (null != u){
 			if (u.getUsername().equals("admin")){
-				List<SysUser> sysUsers = userService.queryUserInfo(new HashMap<String, String>());
-				map.addAttribute("sysUsers", sysUsers);
+//				List<SysUser> sysUsers = userService.queryUserInfo(new HashMap<String, String>());
+//				map.addAttribute("sysUsers", sysUsers);
 				return "thymeleaf/admin_index";
 			} else {
 				List<Map<String, String>> list = sysDoorCountService.getCodeList();
@@ -78,6 +81,16 @@ public class UserContoller {
 			}
 		}
 		return "thymeleaf/login";
+	}
+
+	@RequestMapping("admin/data")
+	@ResponseBody
+	public IMoocJSONResult adminData(ModelMap map,String page, String limit) {
+		val stringStringHashMap = new HashMap<String, String>();
+		stringStringHashMap.put("pageNum", page);
+		stringStringHashMap.put("pageSize", limit);
+		PageInfo<SysUser> sysUsers = userService.queryUserInfo(stringStringHashMap);
+		return IMoocJSONResult.ok(sysUsers);
 	}
 
 	@RequestMapping("count")
